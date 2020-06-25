@@ -35,8 +35,8 @@ def create_df():
 
     combo = covid_df.merge(pop_df, on='Countries', how='inner')
 
-    combo['Cases'] = pd.to_numeric(combo['Cases'], downcast='float')
-    combo['Population'] = pd.to_numeric(combo['Population'], downcast='float')
+    combo['Cases'] = pd.to_numeric(combo['Cases'], downcast='float', errors='coerce')
+    combo['Population'] = pd.to_numeric(combo['Population'], downcast='float', errors='coerce')
     combo['Rate'] = (combo['Cases'] / combo['Population']) * 100
 
     combo = combo[combo.index.isin(my_countries)]
