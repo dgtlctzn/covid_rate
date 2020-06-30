@@ -47,7 +47,7 @@ def create_df():
 
 
 def write_file():
-    with open('/home/pi/PiPy/Covidiot2.csv', 'a') as file:
+    with open('Covidiot2.csv', 'a') as file:
         rate_list = create_df()
         dt = datetime.now()
         file.write('\n')
