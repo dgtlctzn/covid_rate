@@ -60,5 +60,5 @@ if __name__ == '__main__':
     try:
         write_file()
     except Exception as e:
-        with open('/home/pi/PiPy/err_time.csv', 'a') as err:
+        with open('err_time.csv', 'a') as err:
             err.write(f'{e}' + '\n' + str(datetime.now()) + '\n')
