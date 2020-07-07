@@ -17,7 +17,7 @@ def create_df():
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
 
-    covid_data = get_website(covid_url, 5)
+    covid_data = get_website(covid_url, -1)
     pop_data = get_website(pop_url, 0)
 
     covid_data[covid_data.columns[1]] = covid_data[covid_data.columns[1]].str.split('[', expand=True)
@@ -25,7 +25,8 @@ def create_df():
     df_1 = covid_data.set_index(covid_data.columns[1])
     df_2 = pop_data.set_index('Country (or dependency)')
 
-    covid_df = df_1.loc[:, ["Cases[b]"]]
+    assert "Cases[b]" in df_1.columns[1], 'try another column'
+    covid_df = df_1.loc[:, [df_1.columns[1]]]
     covid_df.index.name = 'Countries'
     covid_df.columns = ['Cases']
 
