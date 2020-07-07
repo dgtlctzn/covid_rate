@@ -25,7 +25,6 @@ def create_df():
     df_1 = covid_data.set_index(covid_data.columns[1])
     df_2 = pop_data.set_index('Country (or dependency)')
 
-    assert "Cases[b]" in df_1.columns[1], 'try another column'
     covid_df = df_1.loc[:, [df_1.columns[1]]]
     covid_df.index.name = 'Countries'
     covid_df.columns = ['Cases']
