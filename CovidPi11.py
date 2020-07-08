@@ -4,28 +4,33 @@ import pandas as pd
 from datetime import datetime
 
 
-def get_website(my_url, number):
+# returns specific table from website
+def get_website(my_url, df_num):
     html = requests.get(my_url).content
     data = pd.read_html(html)
-    return data[number]
+    return data[df_num]
 
 
 def create_df():
     covid_url = 'https://en.wikipedia.org/wiki/COVID-19_pandemic'
     pop_url = 'https://www.worldometers.info/world-population/population-by-country/'
+
+    # the list of countries I decided to track
     my_countries = ['United States', 'Canada', 'Mexico', 'Italy', 'France', 'Germany', 'Spain', 'United Kingdom',
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
 
-    covid_data = get_website(covid_url, 5)
+    # -1 returns the last table on the page
+    covid_data = get_website(covid_url, -1)
     pop_data = get_website(pop_url, 0)
 
+    # covid_data.columns[1] returns the name of the column even if it is changed on the website
     covid_data[covid_data.columns[1]] = covid_data[covid_data.columns[1]].str.split('[', expand=True)
 
     df_1 = covid_data.set_index(covid_data.columns[1])
     df_2 = pop_data.set_index('Country (or dependency)')
 
-    covid_df = df_1.loc[:, ["Cases[b]"]]
+    covid_df = df_1.loc[:, [df_1.columns[1]]]
     covid_df.index.name = 'Countries'
     covid_df.columns = ['Cases']
 
@@ -35,6 +40,7 @@ def create_df():
 
     combo = covid_df.merge(pop_df, on='Countries', how='inner')
 
+    # errors='coerce' ignores empty data in the tables
     combo['Cases'] = pd.to_numeric(combo['Cases'], downcast='float', errors='coerce')
     combo['Population'] = pd.to_numeric(combo['Population'], downcast='float', errors='coerce')
     combo['Rate'] = (combo['Cases'] / combo['Population']) * 100
