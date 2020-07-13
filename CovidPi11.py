@@ -17,7 +17,7 @@ def create_df():
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
 
-    covid_data = get_website(covid_url, -1)
+    covid_data = get_website(covid_url, 4)
     pop_data = get_website(pop_url, 0)
 
     covid_data[covid_data.columns[1]] = covid_data[covid_data.columns[1]].str.split('[', expand=True)
