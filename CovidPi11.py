@@ -20,8 +20,7 @@ def create_df():
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
 
-    # -1 returns the last table on the page
-    covid_data = get_website(covid_url, -1)
+    covid_data = get_website(covid_url, 4)
     pop_data = get_website(pop_url, 0)
 
     # covid_data.columns[1] returns the name of the column even if it is changed on the website
