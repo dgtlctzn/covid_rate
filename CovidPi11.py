@@ -7,7 +7,10 @@ from datetime import datetime
 def get_website(my_url, number):
     html = requests.get(my_url).content
     data = pd.read_html(html)
-    return data[number]
+    for df in data:
+        if df.shape[0] > 200:
+            my_df = df
+            return my_df
 
 
 def create_df():
