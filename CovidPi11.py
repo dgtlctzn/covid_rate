@@ -5,10 +5,13 @@ from datetime import datetime
 
 
 # returns specific table from website
-def get_website(my_url, df_num):
+def get_website(my_url):
     html = requests.get(my_url).content
     data = pd.read_html(html)
-    return data[df_num]
+    for df in data:
+        if df.shape[0] > 200:
+            my_df = df
+            return my_df
 
 
 def create_df():
@@ -20,8 +23,8 @@ def create_df():
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
 
-    covid_data = get_website(covid_url, 4)
-    pop_data = get_website(pop_url, 0)
+    covid_data = get_website(covid_url)
+    pop_data = get_website(pop_url)
 
     # covid_data.columns[1] returns the name of the column even if it is changed on the website
     covid_data[covid_data.columns[1]] = covid_data[covid_data.columns[1]].str.split('[', expand=True)
