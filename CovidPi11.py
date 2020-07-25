@@ -28,6 +28,7 @@ def create_df():
     combo = covid_df.merge(pop_df, on='Countries', how='inner')
     combo['Rate'] = (combo['Total Cases'] / combo['Population']) * 100
 
+    # the list of countries I decided to track
     my_countries = ['United States', 'Canada', 'Mexico', 'Italy', 'France', 'Germany', 'Spain', 'United Kingdom',
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
