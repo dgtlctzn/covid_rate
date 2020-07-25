@@ -14,11 +14,12 @@ def create_df():
         if 'total_cases' in covid_df.loc['data', :][i][-1]:
             covid_dict[covid_df.loc['location', :][i]] = covid_df.loc['data', :][i][-1]['total_cases']
     covid_df = pd.DataFrame.from_dict(covid_dict, orient='index', columns=['Total Cases'])
+    covid_df.index.name = 'Countries'
 
     # creates population df from web
     pop_url = 'https://www.worldometers.info/world-population/population-by-country/'
     html = requests.get(pop_url).content
-    pop_data = pd.read_html(html)
+    pop_data = pd.read_html(html)[0]
     pop_data = pop_data.set_index('Country (or dependency)')
     pop_df = pop_data.loc[:, ['Population (2020)']]
     pop_df.index.name = 'Countries'
