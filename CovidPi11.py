@@ -4,48 +4,34 @@ import pandas as pd
 from datetime import datetime
 
 
-# returns specific table from website
-def get_website(my_url):
-    html = requests.get(my_url).content
-    data = pd.read_html(html)
-    for df in data:
-        if df.shape[0] > 200:
-            my_df = df
-            return my_df
-
-
 def create_df():
-    covid_url = 'https://en.wikipedia.org/wiki/COVID-19_pandemic'
+
+    # creates covid df from json
+    web_df = requests.get('https://covid.ourworldindata.org/data/owid-covid-data.json')
+    covid_df = pd.read_json(web_df.content)
+    covid_dict = {}
+    for i in range(0, covid_df.shape[1]):
+        if 'total_cases' in covid_df.loc['data', :][i][-1]:
+            covid_dict[covid_df.loc['location', :][i]] = covid_df.loc['data', :][i][-1]['total_cases']
+    covid_df = pd.DataFrame.from_dict(covid_dict, orient='index', columns=['Total Cases'])
+    covid_df.index.name = 'Countries'
+
+    # creates population df from web
     pop_url = 'https://www.worldometers.info/world-population/population-by-country/'
+    html = requests.get(pop_url).content
+    pop_data = pd.read_html(html)[0]
+    pop_data = pop_data.set_index('Country (or dependency)')
+    pop_df = pop_data.loc[:, ['Population (2020)']]
+    pop_df.index.name = 'Countries'
+    pop_df.columns = ['Population']
+
+    combo = covid_df.merge(pop_df, on='Countries', how='inner')
+    combo['Rate'] = (combo['Total Cases'] / combo['Population']) * 100
 
     # the list of countries I decided to track
     my_countries = ['United States', 'Canada', 'Mexico', 'Italy', 'France', 'Germany', 'Spain', 'United Kingdom',
                     'Japan', 'South Korea', 'India', 'Philippines', 'Brazil', 'Venezuela', 'Peru', 'South Africa',
                     'Egypt', 'Nigeria', 'Ethiopia', 'Iran', 'Israel', 'Australia']
-
-    covid_data = get_website(covid_url)
-    pop_data = get_website(pop_url)
-
-    # covid_data.columns[1] returns the name of the column even if it is changed on the website
-    covid_data[covid_data.columns[1]] = covid_data[covid_data.columns[1]].str.split('[', expand=True)
-
-    df_1 = covid_data.set_index(covid_data.columns[1])
-    df_2 = pop_data.set_index('Country (or dependency)')
-
-    covid_df = df_1.loc[:, [df_1.columns[1]]]
-    covid_df.index.name = 'Countries'
-    covid_df.columns = ['Cases']
-
-    pop_df = df_2.loc[:, ['Population (2020)']]
-    pop_df.index.name = 'Countries'
-    pop_df.columns = ['Population']
-
-    combo = covid_df.merge(pop_df, on='Countries', how='inner')
-
-    # errors='coerce' ignores empty data in the tables
-    combo['Cases'] = pd.to_numeric(combo['Cases'], downcast='float', errors='coerce')
-    combo['Population'] = pd.to_numeric(combo['Population'], downcast='float', errors='coerce')
-    combo['Rate'] = (combo['Cases'] / combo['Population']) * 100
 
     combo = combo[combo.index.isin(my_countries)]
     combo = combo.reindex(my_countries)
