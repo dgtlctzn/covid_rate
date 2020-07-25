@@ -3,7 +3,7 @@ Tracking the rate of Covid-19 on a Raspberry Pi
 
 The rate of Covid of 22 countries is determined from total cases divided by country population. The data is wrangled with Pandas. The script is run every 12 hours and stores the rates by country in a .csv. Sources for Covid counts are found here:
 
-www.wikipedia.org/wiki/COVID-19_pandemic
+https://covid.ourworldindata.org/data/owid-covid-data.json
 
 And country populations here:
 
