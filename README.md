@@ -7,7 +7,7 @@ The rate of Covid of 22 countries is determined from total cases divided by coun
 
 Jupyter notebooks is used to graph Covid rates over time. The first notebook graphs 19 countries using matplotlib. The second notebook takes the Covid rate of the U.S. and applies both linear and third order polynomial regression to investigate the trends in the rate. Root Mean Squared Error is calculated to give a comparison of linear and polynomial best fit lines.
 ## Credits
-Sources for daily Covid counts are taken from the [Our World In Data](https://covid.ourworldindata.org/data/owid-covid-data.json) API. Country populations are taken from [WorldOMeters](www.worldometers.info/world-population/population-by-country/).
+Sources for daily Covid counts are taken from the [Our World In Data](https://covid.ourworldindata.org/data/owid-covid-data.json) API. Country populations are taken from [WorldOMeters](https://www.worldometers.info/world-population/population-by-country/).
 
 ## License
 MIT License
